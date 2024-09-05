@@ -10,5 +10,5 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "mo
 
 object Constant {
     val modelPersonality = stringPreferencesKey("model_personality")
-    const val API_KEY = "AIzaSyCP0U2wi_78yWMe3NhkkNmOyjiX20da150"
+    const val API_KEY = ""
 }
