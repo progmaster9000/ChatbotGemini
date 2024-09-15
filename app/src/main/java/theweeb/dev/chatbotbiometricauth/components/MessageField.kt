@@ -61,6 +61,7 @@ fun MessageField(
     clearImage: () -> Unit,
     sendMessage: (String) -> Unit
 ) {
+
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
     val contextResolver = LocalContext.current.contentResolver
@@ -72,7 +73,6 @@ fun MessageField(
             }
         }
     )
-
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val data = it.data

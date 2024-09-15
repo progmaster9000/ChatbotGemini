@@ -142,7 +142,7 @@ fun NoteDrawer(
                                         isCheckBoxVisible = true
                                     },
                                     onCheck = { id ->
-                                        val noteId = notes.find { it.noteId == id }?.noteId // to check if selected ang note
+                                        val noteId = notes.find { it.noteId == id }?.noteId
                                         val note = notesTobeDeleted.find { it != noteId }
                                         if(noteId != null){
                                             notesTobeDeleted.add(noteId)

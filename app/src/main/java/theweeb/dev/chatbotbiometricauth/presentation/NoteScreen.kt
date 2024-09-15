@@ -76,6 +76,7 @@ private fun NoteScreen(
     onNoteContentChange: (String) -> Unit,
     back: () -> Unit,
 ) {
+
     NoteScreen(
         modifier = modifier,
         state = noteState,
