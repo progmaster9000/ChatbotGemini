@@ -1,5 +1,6 @@
 package theweeb.dev.chatbotbiometricauth.presentation
 
+import android.graphics.Bitmap
 import android.util.Log
 import com.google.ai.client.generativeai.Chat
 import com.google.ai.client.generativeai.GenerativeModel
@@ -35,6 +36,7 @@ data class ConversationState(
     var messageCollectionJob: Job? = null,
     val conversationMessages: List<Message> = emptyList(),
     val modelNoteResponse: String = "",
+    val bitmap: Bitmap? = null,
     val noteTitles: List<NoteTuple> = emptyList(),
     var currentMessage: String = "",
     val isConversationLoading: Boolean = true

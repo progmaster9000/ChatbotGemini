@@ -1,5 +1,6 @@
 package theweeb.dev.chatbotbiometricauth
 
+import android.content.ContentResolver
 import android.os.Bundle
 import android.view.Window
 import android.view.WindowManager
@@ -78,6 +79,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ChatbotBiometricAuthTheme {
+
                 val state by viewModel.state.collectAsStateWithLifecycle()
                 val navController = rememberNavController()
 

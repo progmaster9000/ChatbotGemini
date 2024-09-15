@@ -1,7 +1,14 @@
 package theweeb.dev.chatbotbiometricauth.presentation
 
+import android.content.ContentResolver
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -60,6 +67,7 @@ import theweeb.dev.chatbotbiometricauth.components.MessageField
 import theweeb.dev.chatbotbiometricauth.components.ModelSnackBar
 import theweeb.dev.chatbotbiometricauth.components.PersonalityPicker
 import theweeb.dev.chatbotbiometricauth.model.ModelPersonality
+import java.io.InputStream
 
 @Composable
 fun HomeRoute(
@@ -88,12 +96,15 @@ fun HomeRoute(
 
     HomeScreen(
         modifier = modifier,
+        storedImageBitmap = conversationState.bitmap,
         conversationState = conversationState,
         conversationEvent = viewModel::conversationEvent,
         saveModelPersonality = viewModel::saveModelPersonality,
         openDrawer = openDrawer,
         clearModel = viewModel::clearModel,
         clearSnackBarMessage = viewModel::clearSnackBarMessage,
+        getImage = viewModel::getBitMapFromUri,
+        clearImage = viewModel::clearBitMap,
         onMessageChange = viewModel::onMessageChange
     )
 }
@@ -103,12 +114,15 @@ fun HomeRoute(
 @Composable
 private fun HomeScreen(
     modifier: Modifier = Modifier,
+    storedImageBitmap: Bitmap?,
     conversationState: ConversationState,
     conversationEvent: (ConversationEvent) -> Unit,
     saveModelPersonality: (Context, ModelPersonality) -> Unit,
     openDrawer: () -> Unit,
     clearModel: (Context) -> Unit,
     clearSnackBarMessage: () -> Unit,
+    getImage: (Bitmap?) -> Unit,
+    clearImage: () -> Unit,
     onMessageChange: (String) -> Unit
 ) {
 
@@ -122,6 +136,7 @@ private fun HomeScreen(
             if(item != null) return@derivedStateOf true else false
         }
     }
+
 
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -271,13 +286,17 @@ private fun HomeScreen(
                         modifier = modifier
                             .fillMaxWidth()
                             .background(MaterialTheme.colorScheme.surface)
-                            .padding(vertical = 8.dp, horizontal = 16.dp)
+                            .padding(horizontal = 8.dp)
                             .imePadding(),
                         message = conversationState.currentMessage,
+                        contextResolver = context.contentResolver,
+                        storedImageBitmap = storedImageBitmap,
                         isConversationEmpty = conversationState.conversationMessages.isEmpty(),
                         suggestedMessage = conversationState.model?.personality?.suggestedConversation ?: "",
                         isSendingMessage = conversationState.messageCollectionJob?.isActive == true,
                         onValueChange = onMessageChange,
+                        getImage = getImage,
+                        clearImage = clearImage,
                         sendMessage = {
                             conversationEvent(ConversationEvent.SendTextMessage(it))
                         }

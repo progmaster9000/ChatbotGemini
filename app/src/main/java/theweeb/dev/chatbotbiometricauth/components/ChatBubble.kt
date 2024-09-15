@@ -1,5 +1,7 @@
 package theweeb.dev.chatbotbiometricauth.components
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.AnnotatedString
@@ -56,7 +59,10 @@ fun ChatBubble(
     when(message.responseType){
         ResponseType.USER.name -> {
             Column(
-                modifier = modifier.fillMaxWidth().padding(start = 100.dp, bottom = 1.dp).clickable { isUserMessageDetailShown = !isUserMessageDetailShown },
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(start = 100.dp, bottom = 1.dp)
+                    .clickable { isUserMessageDetailShown = !isUserMessageDetailShown },
                 verticalArrangement = Arrangement.spacedBy(4.dp),
                 horizontalAlignment = Alignment.End
             ) {
@@ -68,6 +74,14 @@ fun ChatBubble(
                         text = AnnotatedString(text = message.content),
                         modifier = modifier.padding(12.dp)
                     )
+                    if(message.imageData != null){
+                        val bitmap = byteArrayToBitmap(message.imageData)
+                        Image(
+                            bitmap = bitmap.asImageBitmap(),
+                            contentDescription = null,
+                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                        )
+                    }
                 }
                 AnimatedVisibility(visible = isUserMessageDetailShown) {
                     Text(
@@ -80,7 +94,9 @@ fun ChatBubble(
         }
         ResponseType.MODEL.name -> {
             Row(
-                modifier = modifier.padding(end = 20.dp).clickable { isModelMessageDetailShown = !isModelMessageDetailShown },
+                modifier = modifier
+                    .padding(end = 20.dp)
+                    .clickable { isModelMessageDetailShown = !isModelMessageDetailShown },
                 verticalAlignment = Alignment.Top
             ) {
                 if(modelImage != 0){
@@ -94,8 +110,7 @@ fun ChatBubble(
                     )
                 }
                 Spacer(modifier = modifier.width(12.dp))
-                Column(modifier = modifier
-                    .weight(1f)) {
+                Column(modifier = modifier.weight(1f)) {
                     Text(
                         text = message.content
                     )
@@ -131,4 +146,8 @@ fun ChatBubble(
             }
         }
     }
+}
+
+private fun byteArrayToBitmap(byteArray: ByteArray): Bitmap {
+    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }

@@ -15,6 +15,7 @@ import java.util.UUID
 @Entity
 data class Message(
     @PrimaryKey val messageId: String = UUID.randomUUID().toString(),
+    val imageData: ByteArray? = null,
     val date: String = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd MMMM HH:mm:ss")),
     val content: String = "",
     val responseType: String = ResponseType.UNSPECIFIED.name
