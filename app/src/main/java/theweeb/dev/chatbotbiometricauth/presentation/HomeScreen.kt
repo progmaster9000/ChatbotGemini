@@ -289,7 +289,6 @@ private fun HomeScreen(
                             .padding(horizontal = 8.dp)
                             .imePadding(),
                         message = conversationState.currentMessage,
-                        contextResolver = context.contentResolver,
                         storedImageBitmap = storedImageBitmap,
                         isConversationEmpty = conversationState.conversationMessages.isEmpty(),
                         suggestedMessage = conversationState.model?.personality?.suggestedConversation ?: "",

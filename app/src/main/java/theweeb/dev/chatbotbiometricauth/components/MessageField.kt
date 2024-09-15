@@ -39,6 +39,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -50,7 +51,6 @@ import java.util.Locale
 @Composable
 fun MessageField(
     modifier: Modifier = Modifier,
-    contextResolver: ContentResolver,
     storedImageBitmap: Bitmap?,
     message: String,
     isConversationEmpty: Boolean,
@@ -63,7 +63,7 @@ fun MessageField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
-
+    val contextResolver = LocalContext.current.contentResolver
     val imageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->

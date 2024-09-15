@@ -37,6 +37,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import theweeb.dev.chatbotbiometricauth.components.NoteField
 import theweeb.dev.chatbotbiometricauth.model.Note
@@ -49,7 +50,7 @@ fun NoteRoute(
     back: () -> Unit
 ) {
 
-    val noteState by viewModel.noteState.collectAsState()
+    val noteState by viewModel.noteState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getNote(noteId)
@@ -75,13 +76,6 @@ private fun NoteScreen(
     onNoteContentChange: (String) -> Unit,
     back: () -> Unit,
 ) {
-
-    DisposableEffect(Unit) {
-        onDispose {
-            noteEvent(NoteEvent.UpsertNote(noteState.note))
-        }
-    }
-
     NoteScreen(
         modifier = modifier,
         state = noteState,
